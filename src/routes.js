@@ -14,11 +14,11 @@ const routes = new express.Router()
 const upload = multer(uploadConfig)
 
 // POST
-routes.get('/posts', AuthMiddleware, PostController.index);
+routes.get('/posts', PostController.index);
 routes.post('/posts', AuthMiddleware, upload.single('image'), PostController.store)
 
 // LIKE
-routes.post('/posts/:id/like', AuthMiddleware, upload.single('image'), LikeController.store)
+routes.get('/posts/:id/like', AuthMiddleware, upload.single('image'), LikeController.store)
 
 // AUTH
 routes.post('/register', AuthController.store)

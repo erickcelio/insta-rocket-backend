@@ -2,13 +2,16 @@ import sharp from 'sharp'
 import { resolve } from 'path'
 import { unlinkSync } from 'fs'
 
-import { Post } from '../models'
+import {Post, User} from '../models'
 
 module.exports = {
   async index(req, res) {
     const posts = await Post.find().sort('-createdAt')
-
-    return res.json(posts)
+    const postsWithAuthor = await Promise.all(posts.map(async (post) => {
+      post.author = await User.findById(post.author)
+      return post
+    }))
+    return res.json(postsWithAuthor)
   },
 
   async store(req, res) {
@@ -31,7 +34,7 @@ module.exports = {
       place,
       description,
       hashtags,
-      fileName
+      image: fileName
     })
 
     req.io.emit('post', post)

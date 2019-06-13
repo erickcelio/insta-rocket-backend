@@ -5,3 +5,5 @@ node_modules
 .idea
 
 src/config/credentials.json
+
+uploads/resized/*
